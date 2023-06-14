@@ -16,6 +16,16 @@ final authControllerProvider =
   );
 });
 
+final currentUserDetailProvider = FutureProvider((ref) {
+  final currentUserId = ref.watch(currentUserAccountProvider).value!.$id;
+  final userDetail = ref.watch(userDetailProvider(currentUserId));
+  return userDetail.value;
+});
+
+final userDetailProvider = FutureProvider.family((ref,String uid) {
+  final authController =ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
+});
 final currentUserAccountProvider = FutureProvider((ref) {
  final authController = ref.watch(authControllerProvider.notifier);
  return authController.currentUser();
@@ -46,7 +56,7 @@ Future<model.Account?>currentUser() => _authAPI.currentUserAccount();
     res.fold(
       (l) => showSnackbar(context,l.message),
       (r) async {
-        UserModel userModel = UserModel(email: email, name: getNamefromEmail(email), followers:const [], following:const [], profilePic: '', bannerPic: '', uid: '', bio: '', isTwitterBlue: false);
+        UserModel userModel = UserModel(email: email, name: getNamefromEmail(email), followers:const [], following:const [], profilePic: '', bannerPic: '', uid: r.$id, bio: '', isTwitterBlue: false);
         final res2 = await _userApi.saveUserData(userModel);
         res2.fold((l) => showSnackbar(context,l.message), (r) {showSnackbar(context,'akun telah dibuat,silahkan login');
         Navigator.push(context,LoginView.route());
@@ -74,5 +84,10 @@ Future<model.Account?>currentUser() => _authAPI.currentUserAccount();
         Navigator.push(context,Homeview.route());
         },
     );
+  }
+  Future<UserModel>getUserData(String uid)async {
+    final document = await _userApi.getUserData(uid);
+    final updateUser = UserModel.fromMap(document.data);
+    return updateUser;
   }
 }

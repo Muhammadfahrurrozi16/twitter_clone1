@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../theme/pallete.dart';
 import '../../../constants/constants.dart';
+import '../../tweet/view/create_tweet.dart';
 
 class Homeview extends StatefulWidget {
   static route() => MaterialPageRoute(
@@ -25,6 +26,10 @@ class _HomeviewState extends State<Homeview> {
       _page =index;
     });
   }
+
+  onCreateTweet(){
+    Navigator.push(context, CreateTwetScreen.route());
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +39,7 @@ class _HomeviewState extends State<Homeview> {
         children: UIConstants.bottomTabBarPages,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:(){},
+        onPressed:onCreateTweet,
         child: const Icon(
           Icons.add,
           color: Pallete.whiteColor,
