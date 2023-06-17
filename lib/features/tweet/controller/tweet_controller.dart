@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone1/apis/storage_api.dart';
-import 'package:twitter_clone1/apis/tweet_api.dart';
+import '../../../apis/tweet_api.dart';
 import 'package:twitter_clone1/core/enum/tweet_type_enum.dart';
 import 'package:twitter_clone1/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone1/models/tweet_model.dart';
@@ -16,6 +16,11 @@ final tweetControllerProvider = StateNotifierProvider<TweetControllers,bool>((re
     );
 });
 
+final getTweetProvider = FutureProvider((ref) async {
+  final tweetController = ref.watch(tweetControllerProvider.notifier);
+  return tweetController.getTweet();
+});
+
 class TweetControllers extends StateNotifier<bool> {
   final TweetApi _tweetApi;
   final StorageApi _storageApi;
@@ -28,6 +33,10 @@ class TweetControllers extends StateNotifier<bool> {
     _tweetApi=tweetApi,
     _storageApi=storageApi,
      super(false);
+  Future<List<Tweet>>getTweet() async{
+    final tweetList = await _tweetApi.getTweet();
+    return tweetList.map((tweet) =>Tweet.fromMap(tweet.data)).toList();
+  }
 
   void shareTweet({
     required List<File>images,
