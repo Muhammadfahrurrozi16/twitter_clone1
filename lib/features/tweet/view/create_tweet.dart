@@ -34,6 +34,7 @@ class _CreateTwetScreenState extends ConsumerState<CreateTwetScreen> {
       text: tweetTextControllers.text,
       context: context,
       );
+    Navigator.pop(context);
     }
   void onpickImages() async{
     images = await pickImage();

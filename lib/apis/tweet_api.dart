@@ -17,6 +17,8 @@ abstract class ITweetApi{
   FutureEither<Document> shareTweet(Tweet tweet);
   Future<List<Document>> getTweet();
   Stream<RealtimeMessage> getLatestTweet();
+  FutureEither<Document> likeTweets(Tweet tweet);
+  FutureEither<Document> updateReshareCount(Tweet tweet);
 }
 
 class TweetApi implements ITweetApi{
@@ -46,11 +48,35 @@ class TweetApi implements ITweetApi{
       );
     } 
   }
+  @override 
+  FutureEither<Document>likeTweets(Tweet tweet)async{
+    try{
+      final document = await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseId, 
+        collectionId: AppwriteConstants.tweetCollection, 
+        documentId: tweet.id, 
+        data:{
+          'likes' : tweet.likes
+        }
+        );
+    return right(document);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+        Failure(e.message ?? 'Some unexpected error occured', stackTrace),
+      );
+    } catch (e, stackTrace) {
+      return left(
+        Failure(e.toString(), stackTrace),
+      );
+    } 
+  }
   @override
   Future<List<Document>> getTweet() async{
     final documents = await _db.listDocuments(
       databaseId: AppwriteConstants.databaseId, 
       collectionId: AppwriteConstants.tweetCollection,
+      queries: [Query.orderDesc('tweetedAt'),
+      ]
       );
     return documents.documents;
   }
@@ -59,5 +85,28 @@ class TweetApi implements ITweetApi{
     return _realtime.subscribe([
       'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.tweetCollection}.documents'
     ]).stream;
+  }
+  
+  @override
+  FutureEither<Document> updateReshareCount(Tweet tweet) async {
+    try{
+      final document = await _db.updateDocument(
+        databaseId: AppwriteConstants.databaseId, 
+        collectionId: AppwriteConstants.tweetCollection, 
+        documentId: tweet.id, 
+        data:{
+          'reshareCount' : tweet.reshareCount
+        }
+        );
+    return right(document);
+    } on AppwriteException catch (e, stackTrace) {
+      return left(
+        Failure(e.message ?? 'Some unexpected error occured', stackTrace),
+      );
+    } catch (e, stackTrace) {
+      return left(
+        Failure(e.toString(), stackTrace),
+      );
+    } 
   }
 }
