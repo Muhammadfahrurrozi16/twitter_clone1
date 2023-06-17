@@ -2,24 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone1/common/common.dart';
 import 'package:twitter_clone1/features/tweet/controller/tweet_controller.dart';
+import 'package:twitter_clone1/models/tweet_model.dart';
 import '../widget/tweet_card.dart';
+import '../../../constants/constants.dart';
 class TweetList extends ConsumerWidget {
   const TweetList({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ref.watch(getTweetProvider).when(
       data: (tweet){
-        return ListView.builder(
-          itemCount: tweet.length,
-          itemBuilder: (BuildContext context, index) {
+        return ref.watch(getlatesttweetProvider).when(
+          data: (data){
+            if (data.events.contains(
+              'databases.*.collections.${AppwriteConstants.tweetCollection}.documents.*.create'
+            )){tweet.insert(0, Tweet.fromMap(data.payload));
+            }
+            return ListView.builder(
+            itemCount: tweet.length,
+            itemBuilder: (BuildContext context, index) {
             final tweets = tweet[index];
             return Tweetcard(tweets:tweets);
           },
           );
+          }, error: (error, stackTrace) => Errortext(error: error.toString(),
+        ), 
+        loading: () {
+          return ListView.builder(
+            itemCount: tweet.length,
+            itemBuilder: (BuildContext context, index) {
+            final tweets = tweet[index];
+            return Tweetcard(tweets:tweets);
+          },
+          );
+        }
+        );
+        
       }, error: (error, stackTrace) => Errortext(error: error.toString()
       ), 
         loading: () => const Loader()
-        );
+    );
   }
 }

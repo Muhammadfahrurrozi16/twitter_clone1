@@ -8,16 +8,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final tweetApiProvider = Provider((ref) {
   return TweetApi(
-    db: ref.watch(appwriteDatabaseProvider));
+    db: ref.watch(appwriteDatabaseProvider),
+    realtime: ref.watch(appwriteRealtimeProvider),
+  );
+
 });
 abstract class ITweetApi{
   FutureEither<Document> shareTweet(Tweet tweet);
   Future<List<Document>> getTweet();
+  Stream<RealtimeMessage> getLatestTweet();
 }
 
 class TweetApi implements ITweetApi{
   final Databases _db;
-  TweetApi({required Databases db }) :_db = db;
+  final Realtime _realtime;
+  TweetApi({required Databases db,
+   required Realtime realtime
+   }) :_db = db,
+   _realtime=realtime;
   @override 
   FutureEither<Document>shareTweet(Tweet tweet)async{
     try{
@@ -45,5 +53,11 @@ class TweetApi implements ITweetApi{
       collectionId: AppwriteConstants.tweetCollection,
       );
     return documents.documents;
+  }
+  @override
+  Stream<RealtimeMessage> getLatestTweet(){
+    return _realtime.subscribe([
+      'databases.${AppwriteConstants.databaseId}.collections.${AppwriteConstants.tweetCollection}.documents'
+    ]).stream;
   }
 }
