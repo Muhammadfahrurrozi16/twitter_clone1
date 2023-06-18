@@ -16,6 +16,8 @@ final tweetApiProvider = Provider((ref) {
 abstract class ITweetApi{
   FutureEither<Document> shareTweet(Tweet tweet);
   Future<List<Document>> getTweet();
+  Future<Document> getTweetbyID(String id);
+  Future<List<Document>> getRepliedTotweet(Tweet tweet);
   Stream<RealtimeMessage> getLatestTweet();
   FutureEither<Document> likeTweets(Tweet tweet);
   FutureEither<Document> updateReshareCount(Tweet tweet);
@@ -108,5 +110,24 @@ class TweetApi implements ITweetApi{
         Failure(e.toString(), stackTrace),
       );
     } 
+  }
+  
+  @override
+  Future<List<Document>> getRepliedTotweet(Tweet tweet)async {
+    final document = await _db.listDocuments(
+      databaseId: AppwriteConstants.databaseId, 
+      collectionId: AppwriteConstants.tweetCollection,
+      queries: [
+        Query.equal('repliedTo', tweet.id)
+      ]);
+      return document.documents;
+  }
+  
+  @override
+  Future<Document> getTweetbyID(String id) async {
+    return _db.getDocument(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.tweetCollection,
+      documentId: id,);
   }
 }

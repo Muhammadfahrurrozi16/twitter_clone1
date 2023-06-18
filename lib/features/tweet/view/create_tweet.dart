@@ -33,6 +33,7 @@ class _CreateTwetScreenState extends ConsumerState<CreateTwetScreen> {
       images: images, 
       text: tweetTextControllers.text,
       context: context,
+      repliedTo : '',
       );
     Navigator.pop(context);
     }
