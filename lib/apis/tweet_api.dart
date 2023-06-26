@@ -1,7 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:twitter_clone1/models/tweet_model.dart';
+import 'package:twitter_clone1/model/tweet_model.dart';
 import '../constants/constants.dart';
 import '../core/core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +18,7 @@ abstract class ITweetApi{
   Future<List<Document>> getTweet();
   Future<Document> getTweetbyID(String id);
   Future<List<Document>> getRepliedTotweet(Tweet tweet);
+  Future<List<Document>> gettweetUser(String uid);
   Stream<RealtimeMessage> getLatestTweet();
   FutureEither<Document> likeTweets(Tweet tweet);
   FutureEither<Document> updateReshareCount(Tweet tweet);
@@ -129,5 +130,16 @@ class TweetApi implements ITweetApi{
       databaseId: AppwriteConstants.databaseId,
       collectionId: AppwriteConstants.tweetCollection,
       documentId: id,);
+  }
+  
+  @override
+  Future<List<Document>> gettweetUser(String uid) async {
+    final document = await _db.listDocuments(
+      databaseId: AppwriteConstants.databaseId, 
+      collectionId: AppwriteConstants.tweetCollection,
+      queries: [
+        Query.equal('uid', uid)
+      ]);
+      return document.documents;
   }
 }

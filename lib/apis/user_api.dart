@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import '../constants/constants.dart';
 import '../core/core.dart';
-import '../models/user_models.dart';
+import '../model/user_models.dart';
 
 final userApiProvider = Provider((ref){
   return UserApi(db: ref.watch(appwriteDatabaseProvider));
@@ -12,6 +12,7 @@ final userApiProvider = Provider((ref){
 abstract class IUserAPI{
   FutureEitherVoid saveUserData(UserModel userModel);
   Future<models.Document> getUserData(String uid);
+  Future<List<models.Document>> searchUserByname(String name);
 }
 class UserApi implements IUserAPI {
   final Databases _db;
@@ -39,5 +40,18 @@ class UserApi implements IUserAPI {
       databaseId:AppwriteConstants.databaseId, 
       collectionId: AppwriteConstants.userCollection,
       documentId: uid);
+  }
+  
+  @override
+  Future<List<models.Document>> searchUserByname(String name) async {
+    final documents = await _db.listDocuments(
+      databaseId: AppwriteConstants.databaseId,
+      collectionId: AppwriteConstants.userCollection,
+      queries: [
+        Query.search('name', name),
+      ],
+      );
+      return documents.documents;
+    
   }
 }

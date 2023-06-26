@@ -10,7 +10,7 @@ import 'package:twitter_clone1/features/tweet/widget/carousol_image.dart';
 import '../../../common/common.dart';
 import 'package:twitter_clone1/features/auth/controller/auth_controller.dart';
 import 'package:twitter_clone1/theme/pallete.dart';
-import '../../../models/tweet_model.dart';
+import '../../../model/tweet_model.dart';
 import 'package:timeago/timeago.dart'as time;
 import '../../tweet/widget/hastag_write.dart';
 import 'package:any_link_preview/any_link_preview.dart';

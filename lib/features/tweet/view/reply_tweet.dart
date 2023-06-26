@@ -4,7 +4,7 @@ import 'package:twitter_clone1/features/tweet/controller/tweet_controller.dart';
 import 'package:twitter_clone1/features/tweet/widget/tweet_card.dart';
 import '../../../common/error_page.dart';
 import '../../../common/loading_page.dart';
-import '../../../models/tweet_model.dart';
+import '../../../model/tweet_model.dart';
 import '../../../constants/constants.dart';
 class Replytweet extends ConsumerWidget {
   static route(Tweet tweets) => MaterialPageRoute(

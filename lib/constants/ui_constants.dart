@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/theme.dart';
 import 'constants.dart';
 import '../features/tweet/widget/tweet_list.dart';
+import '../features/search/views/search_view.dart';
 
 class UIConstants {
   static AppBar appBar() {
@@ -16,7 +17,7 @@ class UIConstants {
   }
   static const List<Widget>bottomTabBarPages = [
     TweetList(),
-    Text('search screen'),
+    SearchView(),
     Text('notifikasi screen')
   ];
 }

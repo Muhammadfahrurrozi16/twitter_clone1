@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:twitter_clone1/models/user_models.dart';
+import 'package:twitter_clone1/model/user_models.dart';
 import '../../../apis/auth_api.dart';
 import '../../../core/core.dart';
 import '../view/login_view.dart';

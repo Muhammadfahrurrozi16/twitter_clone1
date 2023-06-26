@@ -2,11 +2,11 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitter_clone1/apis/storage_api.dart';
-import 'package:twitter_clone1/models/user_models.dart';
+import 'package:twitter_clone1/model/user_models.dart';
 import '../../../apis/tweet_api.dart';
 import 'package:twitter_clone1/core/enum/tweet_type_enum.dart';
 import 'package:twitter_clone1/features/auth/controller/auth_controller.dart';
-import 'package:twitter_clone1/models/tweet_model.dart';
+import 'package:twitter_clone1/model/tweet_model.dart';
 import 'dart:io';
 import '../../../core/core.dart';
 

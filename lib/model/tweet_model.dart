@@ -1,11 +1,9 @@
-
-
 import 'package:flutter/foundation.dart';
 
-import 'package:twitter_clone1/core/enum/tweet_type_enum.dart';
+import '../core/enum/tweet_type_enum.dart';
 
 @immutable
-class Tweet {
+class Tweet{
   final String text;
   final List<String> hastag;
   final String link;
